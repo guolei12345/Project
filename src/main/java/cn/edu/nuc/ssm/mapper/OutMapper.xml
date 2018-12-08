@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.OutMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.Out">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="HEIGHT" jdbcType="VARCHAR" property="height" />
+    <result column="WEIGHT" jdbcType="VARCHAR" property="weight" />
+    <result column="LYMPH" jdbcType="VARCHAR" property="lymph" />
+    <result column="LIMB" jdbcType="VARCHAR" property="limb" />
+    <result column="URINARY" jdbcType="VARCHAR" property="urinary" />
+    <result column="ANUS" jdbcType="VARCHAR" property="anus" />
+    <result column="THYROID" jdbcType="VARCHAR" property="thyroid" />
+    <result column="JOINT" jdbcType="VARCHAR" property="joint" />
+    <result column="SKIN" jdbcType="VARCHAR" property="skin" />
+    <result column="SPINE" jdbcType="VARCHAR" property="spine" />
+    <result column="FLATFOOT" jdbcType="VARCHAR" property="flatfoot" />
+    <result column="OTHER" jdbcType="VARCHAR" property="other" />
+    <result column="USERID" jdbcType="VARCHAR" property="userid" />
+    <result column="HEALTHTYPE" jdbcType="VARCHAR" property="healthtype" />
+    <association property="opinion" javaType="cn.edu.nuc.ssm.entity.Opinion">
+    	<result property="diseasename" column="diseasename"></result>
+    	<result property="comp" column="comp"></result>
+    	<association property="user" javaType="cn.edu.nuc.ssm.entity.DUser">
+    		<result property="name" column="name"></result>
+    	</association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, HEIGHT, WEIGHT, LYMPH, LIMB, URINARY, ANUS, THYROID, JOINT, SKIN, SPINE, FLATFOOT, 
+    OTHER, USERID, HEALTHTYPE
+  </sql>
+  <select id="selectAllOut" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from OUT
+  </select>
+  <select id="selectByUserID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    f.*,o.diseasename,o.comp,u.name
+    from OUT f ,Opinion o ,Duser u
+    where f.healthtype = o.healthtype and o.department = '外科' and u.id = o.userid and 
+    f.userID = #{userid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from OUT
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from OUT
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.Out">
+    insert into OUT (ID, HEIGHT, WEIGHT, 
+      LYMPH, LIMB, URINARY, 
+      ANUS, THYROID, JOINT, 
+      SKIN, SPINE, FLATFOOT, 
+      OTHER, USERID, HEALTHTYPE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, #{weight,jdbcType=VARCHAR}, 
+      #{lymph,jdbcType=VARCHAR}, #{limb,jdbcType=VARCHAR}, #{urinary,jdbcType=VARCHAR}, 
+      #{anus,jdbcType=VARCHAR}, #{thyroid,jdbcType=VARCHAR}, #{joint,jdbcType=VARCHAR}, 
+      #{skin,jdbcType=VARCHAR}, #{spine,jdbcType=VARCHAR}, #{flatfoot,jdbcType=VARCHAR}, 
+      #{other,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{healthtype,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.Out">
+    insert into OUT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="height != null">
+        HEIGHT,
+      </if>
+      <if test="weight != null">
+        WEIGHT,
+      </if>
+      <if test="lymph != null">
+        LYMPH,
+      </if>
+      <if test="limb != null">
+        LIMB,
+      </if>
+      <if test="urinary != null">
+        URINARY,
+      </if>
+      <if test="anus != null">
+        ANUS,
+      </if>
+      <if test="thyroid != null">
+        THYROID,
+      </if>
+      <if test="joint != null">
+        JOINT,
+      </if>
+      <if test="skin != null">
+        SKIN,
+      </if>
+      <if test="spine != null">
+        SPINE,
+      </if>
+      <if test="flatfoot != null">
+        FLATFOOT,
+      </if>
+      <if test="other != null">
+        OTHER,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="lymph != null">
+        #{lymph,jdbcType=VARCHAR},
+      </if>
+      <if test="limb != null">
+        #{limb,jdbcType=VARCHAR},
+      </if>
+      <if test="urinary != null">
+        #{urinary,jdbcType=VARCHAR},
+      </if>
+      <if test="anus != null">
+        #{anus,jdbcType=VARCHAR},
+      </if>
+      <if test="thyroid != null">
+        #{thyroid,jdbcType=VARCHAR},
+      </if>
+      <if test="joint != null">
+        #{joint,jdbcType=VARCHAR},
+      </if>
+      <if test="skin != null">
+        #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="spine != null">
+        #{spine,jdbcType=VARCHAR},
+      </if>
+      <if test="flatfoot != null">
+        #{flatfoot,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.Out">
+    update OUT
+    <set>
+      <if test="height != null">
+        HEIGHT = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        WEIGHT = #{weight,jdbcType=VARCHAR},
+      </if>
+      <if test="lymph != null">
+        LYMPH = #{lymph,jdbcType=VARCHAR},
+      </if>
+      <if test="limb != null">
+        LIMB = #{limb,jdbcType=VARCHAR},
+      </if>
+      <if test="urinary != null">
+        URINARY = #{urinary,jdbcType=VARCHAR},
+      </if>
+      <if test="anus != null">
+        ANUS = #{anus,jdbcType=VARCHAR},
+      </if>
+      <if test="thyroid != null">
+        THYROID = #{thyroid,jdbcType=VARCHAR},
+      </if>
+      <if test="joint != null">
+        JOINT = #{joint,jdbcType=VARCHAR},
+      </if>
+      <if test="skin != null">
+        SKIN = #{skin,jdbcType=VARCHAR},
+      </if>
+      <if test="spine != null">
+        SPINE = #{spine,jdbcType=VARCHAR},
+      </if>
+      <if test="flatfoot != null">
+        FLATFOOT = #{flatfoot,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        OTHER = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE = #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.Out">
+    update OUT
+    set HEIGHT = #{height,jdbcType=VARCHAR},
+      WEIGHT = #{weight,jdbcType=VARCHAR},
+      LYMPH = #{lymph,jdbcType=VARCHAR},
+      LIMB = #{limb,jdbcType=VARCHAR},
+      URINARY = #{urinary,jdbcType=VARCHAR},
+      ANUS = #{anus,jdbcType=VARCHAR},
+      THYROID = #{thyroid,jdbcType=VARCHAR},
+      JOINT = #{joint,jdbcType=VARCHAR},
+      SKIN = #{skin,jdbcType=VARCHAR},
+      SPINE = #{spine,jdbcType=VARCHAR},
+      FLATFOOT = #{flatfoot,jdbcType=VARCHAR},
+      OTHER = #{other,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=VARCHAR},
+      HEALTHTYPE = #{healthtype,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

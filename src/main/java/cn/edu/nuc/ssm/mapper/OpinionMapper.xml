@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.OpinionMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.Opinion">
+    <id column="OID" jdbcType="VARCHAR" property="oid" />
+    <result column="DEPARTMENT" jdbcType="VARCHAR" property="department" />
+    <result column="COMP" jdbcType="VARCHAR" property="comp" />
+    <result column="DISEASENAME" jdbcType="VARCHAR" property="diseasename" />
+    <result column="HEALTHTYPE" jdbcType="VARCHAR" property="healthtype" />
+    <result column="USERID" jdbcType="VARCHAR" property="userid" />
+    <association property="user" javaType="cn.edu.nuc.ssm.entity.DUser">
+         <id column="ID" jdbcType="VARCHAR" property="id" />
+         <result column="NAME" jdbcType="VARCHAR" property="name" />
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    OID, DEPARTMENT, COMP, DISEASENAME, HEALTHTYPE, USERID
+  </sql>
+  <select id="selectByDempAndType" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,u.id,u.name  
+    from OPINION o, Duser u 
+    where o.USERID = u.id and o.DEPARTMENT= #{param1,jdbcType=VARCHAR} and o.HEALTHTYPE =  #{param2,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByTypeOpinion" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,u.id,u.name  
+    from OPINION o, Duser u 
+    where o.USERID = u.id and o.DEPARTMENT= #{department,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllOpinion" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,u.id,u.name  
+    from OPINION o, Duser u 
+    where o.USERID = u.id
+  </select>
+  <select id="selectAllOpinionByDep" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,u.id,u.name  
+    from OPINION o, Duser u 
+    where o.USERID = u.id and o.department = #{department,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,u.id,u.name 
+    from OPINION o,Duser u 
+    where OID = #{oid,jdbcType=VARCHAR} and o.USERID = u.id
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from OPINION
+    where OID = #{oid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.Opinion">
+    insert into OPINION (OID, DEPARTMENT, COMP, 
+      DISEASENAME, HEALTHTYPE, USERID
+      )
+    values (#{oid,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{comp,jdbcType=VARCHAR}, 
+      #{diseasename,jdbcType=VARCHAR}, #{healthtype,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.Opinion">
+    insert into OPINION
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        OID,
+      </if>
+      <if test="department != null">
+        DEPARTMENT,
+      </if>
+      <if test="comp != null">
+        COMP,
+      </if>
+      <if test="diseasename != null">
+        DISEASENAME,
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="oid != null">
+        #{oid,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="comp != null">
+        #{comp,jdbcType=VARCHAR},
+      </if>
+      <if test="diseasename != null">
+        #{diseasename,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        #{healthtype,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.Opinion">
+    update OPINION
+    <set>
+      <if test="department != null">
+        DEPARTMENT = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="comp != null">
+        COMP = #{comp,jdbcType=VARCHAR},
+      </if>
+      <if test="diseasename != null">
+        DISEASENAME = #{diseasename,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE = #{healthtype,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OID = #{oid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.Opinion">
+    update OPINION
+    set DEPARTMENT = #{department,jdbcType=VARCHAR},
+      COMP = #{comp,jdbcType=VARCHAR},
+      DISEASENAME = #{diseasename,jdbcType=VARCHAR},
+      HEALTHTYPE = #{healthtype,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=VARCHAR}
+    where OID = #{oid,jdbcType=VARCHAR}
+  </update>
+</mapper>

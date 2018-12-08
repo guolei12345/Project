@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.DUserMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.DUser">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="SEX" jdbcType="VARCHAR" property="sex" />
+    <result column="AGE" jdbcType="VARCHAR" property="age" />
+    <result column="MARRY" jdbcType="VARCHAR" property="marry" />
+    <result column="EDUCATION" jdbcType="VARCHAR" property="education" />
+    <result column="NATIVEPLACE" jdbcType="VARCHAR" property="nativeplace" />
+    <result column="COMPANY" jdbcType="VARCHAR" property="company" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="MEDICALHISTORY" jdbcType="VARCHAR" property="medicalhistory" />
+    <result column="ROLEID" jdbcType="VARCHAR" property="roleid" />
+    <result column="PASS" jdbcType="VARCHAR" property="pass" />
+  	<association property="role" javaType="cn.edu.nuc.ssm.entity.DRole">
+         <id column="roleid" jdbcType="VARCHAR" property="roleid" />
+         <result column="rolename" jdbcType="VARCHAR" property="rolename" />
+    </association>
+    <association property="face" column="id" select="cn.edu.nuc.ssm.dao.FaceMapper.selectByUserID" />
+    <association property="medicine" column="id" select="cn.edu.nuc.ssm.dao.MedicineMapper.selectByUserID" />
+    <association property="out" column="id" select="cn.edu.nuc.ssm.dao.OutMapper.selectByUserID" />
+    <association property="perspective" column="id" select="cn.edu.nuc.ssm.dao.PerspectiveMapper.selectByUserID" />
+    <association property="test" column="id" select="cn.edu.nuc.ssm.dao.TestMapper.selectByUserID" />
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, SEX, AGE, MARRY, EDUCATION, NATIVEPLACE, COMPANY, ADDRESS, MEDICALHISTORY, 
+    ROLEID, PASS
+  </sql>
+  <select id="login" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    u.*, r.roleid, r.rolename 
+    from Duser u, Drole r 
+    where name = #{name,jdbcType=VARCHAR} and pass = #{pass,jdbcType=VARCHAR}
+     and u.roleID = r.roleid
+  </select>
+  <select id="selectUserByID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    u.*, r.roleid, r.rolename 
+    from Duser u, Drole r 
+    where u.roleID = r.roleid and id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectUserByPar" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from DUSER where name like #{name,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllUser" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from DUSER
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from DUSER
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from DUSER
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.DUser">
+    insert into DUSER (ID, NAME, SEX, 
+      AGE, MARRY, EDUCATION, 
+      NATIVEPLACE, COMPANY, ADDRESS, 
+      MEDICALHISTORY, ROLEID, PASS
+      )
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{age,jdbcType=VARCHAR}, #{marry,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, 
+      #{nativeplace,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{medicalhistory,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.DUser">
+    insert into DUSER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="sex != null">
+        SEX,
+      </if>
+      <if test="age != null">
+        AGE,
+      </if>
+      <if test="marry != null">
+        MARRY,
+      </if>
+      <if test="education != null">
+        EDUCATION,
+      </if>
+      <if test="nativeplace != null">
+        NATIVEPLACE,
+      </if>
+      <if test="company != null">
+        COMPANY,
+      </if>
+      <if test="address != null">
+        ADDRESS,
+      </if>
+      <if test="medicalhistory != null">
+        MEDICALHISTORY,
+      </if>
+      <if test="roleid != null">
+        ROLEID,
+      </if>
+      <if test="pass != null">
+        PASS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="marry != null">
+        #{marry,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeplace != null">
+        #{nativeplace,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="medicalhistory != null">
+        #{medicalhistory,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null">
+        #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="pass != null">
+        #{pass,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.DUser">
+    update DUSER
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        AGE = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="marry != null">
+        MARRY = #{marry,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        EDUCATION = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="nativeplace != null">
+        NATIVEPLACE = #{nativeplace,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        COMPANY = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="medicalhistory != null">
+        MEDICALHISTORY = #{medicalhistory,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null">
+        ROLEID = #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="pass != null">
+        PASS = #{pass,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.DUser">
+    update DUSER
+    set NAME = #{name,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      AGE = #{age,jdbcType=VARCHAR},
+      MARRY = #{marry,jdbcType=VARCHAR},
+      EDUCATION = #{education,jdbcType=VARCHAR},
+      NATIVEPLACE = #{nativeplace,jdbcType=VARCHAR},
+      COMPANY = #{company,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      MEDICALHISTORY = #{medicalhistory,jdbcType=VARCHAR},
+      ROLEID = #{roleid,jdbcType=VARCHAR},
+      PASS = #{pass,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

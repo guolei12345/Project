@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.MedicineMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.Medicine">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="USERID" jdbcType="VARCHAR" property="userid" />
+    <result column="BLOODPRESSURE" jdbcType="VARCHAR" property="bloodpressure" />
+    <result column="DEVELOPMENT" jdbcType="VARCHAR" property="development" />
+    <result column="NERVE" jdbcType="VARCHAR" property="nerve" />
+    <result column="LUNG" jdbcType="VARCHAR" property="lung" />
+    <result column="HEART" jdbcType="VARCHAR" property="heart" />
+    <result column="ABDOMEN" jdbcType="VARCHAR" property="abdomen" />
+    <result column="liver" jdbcType="VARCHAR" property="liver" />
+    <result column="SPLEEN" jdbcType="VARCHAR" property="spleen" />
+    <result column="OTHER" jdbcType="VARCHAR" property="other" />
+    <result column="HEALTHTYPE" jdbcType="VARCHAR" property="healthtype" />
+    <association property="opinion" javaType="cn.edu.nuc.ssm.entity.Opinion">
+    	<result property="diseasename" column="diseasename"></result>
+    	<result property="comp" column="comp"></result>
+    	<association property="user" javaType="cn.edu.nuc.ssm.entity.DUser">
+    		<result property="name" column="name"></result>
+    	</association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, USERID, BLOODPRESSURE, DEVELOPMENT, NERVE, LUNG, HEART, ABDOMEN, "liver ", SPLEEN, 
+    OTHER, HEALTHTYPE
+  </sql>
+  <select id="selectAllMedicine" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from MEDICINE
+  </select>
+  <select id="selectByUserID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    f.*,o.diseasename,o.comp,u.name
+    from MEDICINE f ,Opinion o ,Duser u
+    where f.healthtype = o.healthtype and o.department = '内科' and u.id = o.userid and 
+    f.userID = #{userid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from MEDICINE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from MEDICINE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.Medicine">
+    insert into MEDICINE (ID, USERID, BLOODPRESSURE, 
+      DEVELOPMENT, NERVE, LUNG, 
+      HEART, ABDOMEN, "liver ", 
+      SPLEEN, OTHER, HEALTHTYPE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{bloodpressure,jdbcType=VARCHAR}, 
+      #{development,jdbcType=VARCHAR}, #{nerve,jdbcType=VARCHAR}, #{lung,jdbcType=VARCHAR}, 
+      #{heart,jdbcType=VARCHAR}, #{abdomen,jdbcType=VARCHAR}, #{liver,jdbcType=VARCHAR}, 
+      #{spleen,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, #{healthtype,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.Medicine">
+    insert into MEDICINE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+      <if test="bloodpressure != null">
+        BLOODPRESSURE,
+      </if>
+      <if test="development != null">
+        DEVELOPMENT,
+      </if>
+      <if test="nerve != null">
+        NERVE,
+      </if>
+      <if test="lung != null">
+        LUNG,
+      </if>
+      <if test="heart != null">
+        HEART,
+      </if>
+      <if test="abdomen != null">
+        ABDOMEN,
+      </if>
+      <if test="liver != null">
+        "liver ",
+      </if>
+      <if test="spleen != null">
+        SPLEEN,
+      </if>
+      <if test="other != null">
+        OTHER,
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodpressure != null">
+        #{bloodpressure,jdbcType=VARCHAR},
+      </if>
+      <if test="development != null">
+        #{development,jdbcType=VARCHAR},
+      </if>
+      <if test="nerve != null">
+        #{nerve,jdbcType=VARCHAR},
+      </if>
+      <if test="lung != null">
+        #{lung,jdbcType=VARCHAR},
+      </if>
+      <if test="heart != null">
+        #{heart,jdbcType=VARCHAR},
+      </if>
+      <if test="abdomen != null">
+        #{abdomen,jdbcType=VARCHAR},
+      </if>
+      <if test="liver != null">
+        #{liver,jdbcType=VARCHAR},
+      </if>
+      <if test="spleen != null">
+        #{spleen,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.Medicine">
+    update MEDICINE
+    <set>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodpressure != null">
+        BLOODPRESSURE = #{bloodpressure,jdbcType=VARCHAR},
+      </if>
+      <if test="development != null">
+        DEVELOPMENT = #{development,jdbcType=VARCHAR},
+      </if>
+      <if test="nerve != null">
+        NERVE = #{nerve,jdbcType=VARCHAR},
+      </if>
+      <if test="lung != null">
+        LUNG = #{lung,jdbcType=VARCHAR},
+      </if>
+      <if test="heart != null">
+        HEART = #{heart,jdbcType=VARCHAR},
+      </if>
+      <if test="abdomen != null">
+        ABDOMEN = #{abdomen,jdbcType=VARCHAR},
+      </if>
+      <if test="liver != null">
+        "liver " = #{liver,jdbcType=VARCHAR},
+      </if>
+      <if test="spleen != null">
+        SPLEEN = #{spleen,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        OTHER = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE = #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.Medicine">
+    update MEDICINE
+    set USERID = #{userid,jdbcType=VARCHAR},
+      BLOODPRESSURE = #{bloodpressure,jdbcType=VARCHAR},
+      DEVELOPMENT = #{development,jdbcType=VARCHAR},
+      NERVE = #{nerve,jdbcType=VARCHAR},
+      LUNG = #{lung,jdbcType=VARCHAR},
+      HEART = #{heart,jdbcType=VARCHAR},
+      ABDOMEN = #{abdomen,jdbcType=VARCHAR},
+      "liver " = #{liver,jdbcType=VARCHAR},
+      SPLEEN = #{spleen,jdbcType=VARCHAR},
+      OTHER = #{other,jdbcType=VARCHAR},
+      HEALTHTYPE = #{healthtype,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

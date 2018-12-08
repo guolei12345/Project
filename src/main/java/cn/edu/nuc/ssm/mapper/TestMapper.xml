@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.TestMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.Test">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="USERID" jdbcType="VARCHAR" property="userid" />
+    <result column="BLOOD" jdbcType="VARCHAR" property="blood" />
+    <result column="URINE" jdbcType="VARCHAR" property="urine" />
+    <result column="LIVER" jdbcType="VARCHAR" property="liver" />
+    <result column="HEALTHTYPE" jdbcType="VARCHAR" property="healthtype" />
+    <association property="opinion" javaType="cn.edu.nuc.ssm.entity.Opinion">
+    	<result property="diseasename" column="diseasename"></result>
+    	<result property="comp" column="comp"></result>
+    	<association property="user" javaType="cn.edu.nuc.ssm.entity.DUser">
+    		<result property="name" column="name"></result>
+    	</association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, USERID, BLOOD, URINE, LIVER, HEALTHTYPE
+  </sql>
+  <select id="selectAllTest" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from TEST
+  </select>
+  <select id="selectByUserID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    f.*,o.diseasename,o.comp,u.name
+    from TEST f ,Opinion o ,Duser u
+    where f.healthtype = o.healthtype and o.department = '化验科' and u.id = o.userid and 
+    f.userID = #{userid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from TEST
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from TEST
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.Test">
+    insert into TEST (ID, USERID, BLOOD, 
+      URINE, LIVER, HEALTHTYPE
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{blood,jdbcType=VARCHAR}, 
+      #{urine,jdbcType=VARCHAR}, #{liver,jdbcType=VARCHAR}, #{healthtype,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.Test">
+    insert into TEST
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+      <if test="blood != null">
+        BLOOD,
+      </if>
+      <if test="urine != null">
+        URINE,
+      </if>
+      <if test="liver != null">
+        LIVER,
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="blood != null">
+        #{blood,jdbcType=VARCHAR},
+      </if>
+      <if test="urine != null">
+        #{urine,jdbcType=VARCHAR},
+      </if>
+      <if test="liver != null">
+        #{liver,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.Test">
+    update TEST
+    <set>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="blood != null">
+        BLOOD = #{blood,jdbcType=VARCHAR},
+      </if>
+      <if test="urine != null">
+        URINE = #{urine,jdbcType=VARCHAR},
+      </if>
+      <if test="liver != null">
+        LIVER = #{liver,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE = #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.Test">
+    update TEST
+    set USERID = #{userid,jdbcType=VARCHAR},
+      BLOOD = #{blood,jdbcType=VARCHAR},
+      URINE = #{urine,jdbcType=VARCHAR},
+      LIVER = #{liver,jdbcType=VARCHAR},
+      HEALTHTYPE = #{healthtype,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

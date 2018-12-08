@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.PerspectiveMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.Perspective">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="CHEST" jdbcType="VARCHAR" property="chest" />
+    <result column="BMODE" jdbcType="VARCHAR" property="bmode" />
+    <result column="USERID" jdbcType="VARCHAR" property="userid" />
+    <result column="HEALTHTYPE" jdbcType="VARCHAR" property="healthtype" />
+    <association property="opinion" javaType="cn.edu.nuc.ssm.entity.Opinion">
+    	<result property="diseasename" column="diseasename"></result>
+    	<result property="comp" column="comp"></result>
+    	<association property="user" javaType="cn.edu.nuc.ssm.entity.DUser">
+    		<result property="name" column="name"></result>
+    	</association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CHEST, BMODE, USERID, HEALTHTYPE
+  </sql>
+  <select id="selectByUserID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    f.*,o.diseasename,o.comp,u.name
+    from PERSPECTIVE f ,Opinion o ,Duser u
+    where f.healthtype = o.healthtype and o.department = '透视科' and u.id = o.userid and 
+    f.userID = #{userid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllPerspective" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from PERSPECTIVE 
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from PERSPECTIVE
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from PERSPECTIVE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.Perspective">
+    insert into PERSPECTIVE (ID, CHEST, BMODE, 
+      USERID, HEALTHTYPE)
+    values (#{id,jdbcType=VARCHAR}, #{chest,jdbcType=VARCHAR}, #{bmode,jdbcType=VARCHAR}, 
+      #{userid,jdbcType=VARCHAR}, #{healthtype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.Perspective">
+    insert into PERSPECTIVE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="chest != null">
+        CHEST,
+      </if>
+      <if test="bmode != null">
+        BMODE,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="chest != null">
+        #{chest,jdbcType=VARCHAR},
+      </if>
+      <if test="bmode != null">
+        #{bmode,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.Perspective">
+    update PERSPECTIVE
+    <set>
+      <if test="chest != null">
+        CHEST = #{chest,jdbcType=VARCHAR},
+      </if>
+      <if test="bmode != null">
+        BMODE = #{bmode,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="healthtype != null">
+        HEALTHTYPE = #{healthtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.Perspective">
+    update PERSPECTIVE
+    set CHEST = #{chest,jdbcType=VARCHAR},
+      BMODE = #{bmode,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=VARCHAR},
+      HEALTHTYPE = #{healthtype,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

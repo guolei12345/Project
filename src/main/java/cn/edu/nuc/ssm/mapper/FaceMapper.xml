@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.FaceMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.Face">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="USERID" jdbcType="VARCHAR" property="userid" />
+    <result column="LEFTEYE" jdbcType="VARCHAR" property="lefteye" />
+    <result column="RIGHTEYE" jdbcType="VARCHAR" property="righteye" />
+    <result column="LEGTCORRECT" jdbcType="VARCHAR" property="legtcorrect" />
+    <result column="RIGHTCORRECT" jdbcType="VARCHAR" property="rightcorrect" />
+    <result column="COLORBLINDNESS" jdbcType="VARCHAR" property="colorblindness" />
+    <result column="EYEDISEASE" jdbcType="VARCHAR" property="eyedisease" />
+    <result column="LEFTEARS" jdbcType="VARCHAR" property="leftears" />
+    <result column="RIGHTEARS" jdbcType="VARCHAR" property="rightears" />
+    <result column="EARSDISEASE" jdbcType="VARCHAR" property="earsdisease" />
+    <result column="SMELL" jdbcType="VARCHAR" property="smell" />
+    <result column="NOSEDISEASE" jdbcType="VARCHAR" property="nosedisease" />
+    <result column="THROAT" jdbcType="VARCHAR" property="throat" />
+    <result column="STUTTER" jdbcType="VARCHAR" property="stutter" />
+    <result column="DRY" jdbcType="VARCHAR" property="dry" />
+    <result column="HYPODONTIA" jdbcType="VARCHAR" property="hypodontia" />
+    <result column="CARIES" jdbcType="VARCHAR" property="caries" />
+    <result column="OTHER" jdbcType="VARCHAR" property="other" />
+    <result column="HELTHTYPE" jdbcType="VARCHAR" property="helthtype" />
+    <association property="opinion" javaType="cn.edu.nuc.ssm.entity.Opinion">
+    	<result property="diseasename" column="diseasename"></result>
+    	<result property="comp" column="comp"></result>
+    	<association property="user" javaType="cn.edu.nuc.ssm.entity.DUser">
+    		<result property="name" column="name"></result>
+    	</association>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, USERID, LEFTEYE, RIGHTEYE, LEGTCORRECT, RIGHTCORRECT, COLORBLINDNESS, EYEDISEASE, 
+    LEFTEARS, RIGHTEARS, EARSDISEASE, SMELL, NOSEDISEASE, THROAT, STUTTER, DRY, HYPODONTIA, 
+    CARIES, OTHER, HELTHTYPE
+  </sql>
+  <select id="selectAllFace" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from FACE
+  </select>
+  <select id="selectByUserID" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    f.*,o.diseasename,o.comp,u.name
+    from FACE f ,Opinion o ,Duser u
+    where f.helthtype = o.healthtype and o.department = '五官科' and u.id = o.userid and 
+    f.userID = #{userid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from FACE 
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from FACE
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.Face">
+    insert into FACE (ID, USERID, LEFTEYE, 
+      RIGHTEYE, LEGTCORRECT, RIGHTCORRECT, 
+      COLORBLINDNESS, EYEDISEASE, LEFTEARS, 
+      RIGHTEARS, EARSDISEASE, SMELL, 
+      NOSEDISEASE, THROAT, STUTTER, 
+      DRY, HYPODONTIA, CARIES, 
+      OTHER, HELTHTYPE)
+    values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{lefteye,jdbcType=VARCHAR}, 
+      #{righteye,jdbcType=VARCHAR}, #{legtcorrect,jdbcType=VARCHAR}, #{rightcorrect,jdbcType=VARCHAR}, 
+      #{colorblindness,jdbcType=VARCHAR}, #{eyedisease,jdbcType=VARCHAR}, #{leftears,jdbcType=VARCHAR}, 
+      #{rightears,jdbcType=VARCHAR}, #{earsdisease,jdbcType=VARCHAR}, #{smell,jdbcType=VARCHAR}, 
+      #{nosedisease,jdbcType=VARCHAR}, #{throat,jdbcType=VARCHAR}, #{stutter,jdbcType=VARCHAR}, 
+      #{dry,jdbcType=VARCHAR}, #{hypodontia,jdbcType=VARCHAR}, #{caries,jdbcType=VARCHAR}, 
+      #{other,jdbcType=VARCHAR}, #{helthtype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.Face">
+    insert into FACE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+      <if test="lefteye != null">
+        LEFTEYE,
+      </if>
+      <if test="righteye != null">
+        RIGHTEYE,
+      </if>
+      <if test="legtcorrect != null">
+        LEGTCORRECT,
+      </if>
+      <if test="rightcorrect != null">
+        RIGHTCORRECT,
+      </if>
+      <if test="colorblindness != null">
+        COLORBLINDNESS,
+      </if>
+      <if test="eyedisease != null">
+        EYEDISEASE,
+      </if>
+      <if test="leftears != null">
+        LEFTEARS,
+      </if>
+      <if test="rightears != null">
+        RIGHTEARS,
+      </if>
+      <if test="earsdisease != null">
+        EARSDISEASE,
+      </if>
+      <if test="smell != null">
+        SMELL,
+      </if>
+      <if test="nosedisease != null">
+        NOSEDISEASE,
+      </if>
+      <if test="throat != null">
+        THROAT,
+      </if>
+      <if test="stutter != null">
+        STUTTER,
+      </if>
+      <if test="dry != null">
+        DRY,
+      </if>
+      <if test="hypodontia != null">
+        HYPODONTIA,
+      </if>
+      <if test="caries != null">
+        CARIES,
+      </if>
+      <if test="other != null">
+        OTHER,
+      </if>
+      <if test="helthtype != null">
+        HELTHTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="lefteye != null">
+        #{lefteye,jdbcType=VARCHAR},
+      </if>
+      <if test="righteye != null">
+        #{righteye,jdbcType=VARCHAR},
+      </if>
+      <if test="legtcorrect != null">
+        #{legtcorrect,jdbcType=VARCHAR},
+      </if>
+      <if test="rightcorrect != null">
+        #{rightcorrect,jdbcType=VARCHAR},
+      </if>
+      <if test="colorblindness != null">
+        #{colorblindness,jdbcType=VARCHAR},
+      </if>
+      <if test="eyedisease != null">
+        #{eyedisease,jdbcType=VARCHAR},
+      </if>
+      <if test="leftears != null">
+        #{leftears,jdbcType=VARCHAR},
+      </if>
+      <if test="rightears != null">
+        #{rightears,jdbcType=VARCHAR},
+      </if>
+      <if test="earsdisease != null">
+        #{earsdisease,jdbcType=VARCHAR},
+      </if>
+      <if test="smell != null">
+        #{smell,jdbcType=VARCHAR},
+      </if>
+      <if test="nosedisease != null">
+        #{nosedisease,jdbcType=VARCHAR},
+      </if>
+      <if test="throat != null">
+        #{throat,jdbcType=VARCHAR},
+      </if>
+      <if test="stutter != null">
+        #{stutter,jdbcType=VARCHAR},
+      </if>
+      <if test="dry != null">
+        #{dry,jdbcType=VARCHAR},
+      </if>
+      <if test="hypodontia != null">
+        #{hypodontia,jdbcType=VARCHAR},
+      </if>
+      <if test="caries != null">
+        #{caries,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="helthtype != null">
+        #{helthtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.Face">
+    update FACE
+    <set>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="lefteye != null">
+        LEFTEYE = #{lefteye,jdbcType=VARCHAR},
+      </if>
+      <if test="righteye != null">
+        RIGHTEYE = #{righteye,jdbcType=VARCHAR},
+      </if>
+      <if test="legtcorrect != null">
+        LEGTCORRECT = #{legtcorrect,jdbcType=VARCHAR},
+      </if>
+      <if test="rightcorrect != null">
+        RIGHTCORRECT = #{rightcorrect,jdbcType=VARCHAR},
+      </if>
+      <if test="colorblindness != null">
+        COLORBLINDNESS = #{colorblindness,jdbcType=VARCHAR},
+      </if>
+      <if test="eyedisease != null">
+        EYEDISEASE = #{eyedisease,jdbcType=VARCHAR},
+      </if>
+      <if test="leftears != null">
+        LEFTEARS = #{leftears,jdbcType=VARCHAR},
+      </if>
+      <if test="rightears != null">
+        RIGHTEARS = #{rightears,jdbcType=VARCHAR},
+      </if>
+      <if test="earsdisease != null">
+        EARSDISEASE = #{earsdisease,jdbcType=VARCHAR},
+      </if>
+      <if test="smell != null">
+        SMELL = #{smell,jdbcType=VARCHAR},
+      </if>
+      <if test="nosedisease != null">
+        NOSEDISEASE = #{nosedisease,jdbcType=VARCHAR},
+      </if>
+      <if test="throat != null">
+        THROAT = #{throat,jdbcType=VARCHAR},
+      </if>
+      <if test="stutter != null">
+        STUTTER = #{stutter,jdbcType=VARCHAR},
+      </if>
+      <if test="dry != null">
+        DRY = #{dry,jdbcType=VARCHAR},
+      </if>
+      <if test="hypodontia != null">
+        HYPODONTIA = #{hypodontia,jdbcType=VARCHAR},
+      </if>
+      <if test="caries != null">
+        CARIES = #{caries,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null">
+        OTHER = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="helthtype != null">
+        HELTHTYPE = #{helthtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.Face">
+    update FACE
+    set USERID = #{userid,jdbcType=VARCHAR},
+      LEFTEYE = #{lefteye,jdbcType=VARCHAR},
+      RIGHTEYE = #{righteye,jdbcType=VARCHAR},
+      LEGTCORRECT = #{legtcorrect,jdbcType=VARCHAR},
+      RIGHTCORRECT = #{rightcorrect,jdbcType=VARCHAR},
+      COLORBLINDNESS = #{colorblindness,jdbcType=VARCHAR},
+      EYEDISEASE = #{eyedisease,jdbcType=VARCHAR},
+      LEFTEARS = #{leftears,jdbcType=VARCHAR},
+      RIGHTEARS = #{rightears,jdbcType=VARCHAR},
+      EARSDISEASE = #{earsdisease,jdbcType=VARCHAR},
+      SMELL = #{smell,jdbcType=VARCHAR},
+      NOSEDISEASE = #{nosedisease,jdbcType=VARCHAR},
+      THROAT = #{throat,jdbcType=VARCHAR},
+      STUTTER = #{stutter,jdbcType=VARCHAR},
+      DRY = #{dry,jdbcType=VARCHAR},
+      HYPODONTIA = #{hypodontia,jdbcType=VARCHAR},
+      CARIES = #{caries,jdbcType=VARCHAR},
+      OTHER = #{other,jdbcType=VARCHAR},
+      HELTHTYPE = #{helthtype,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
